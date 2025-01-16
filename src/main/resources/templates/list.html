@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/main.css" rel="stylesheet">
+</head>
+<body>
+
+<div th:replace="~{nav.html :: navbar}"></div>
+
+
+<div class="card" th:each="i:${items}">
+        <img src="https://placehold.co/300">
+        <div>
+            <a th:href="@{'/detail/'+${i.id}}">
+                <h4 th:text ="${i.title}">상품</h4>
+            </a>
+            <p th:text="${i.price+'원'}">가격</p>
+            <a th:href="@{'/edit/'+${i.id}}">✏️</a>
+            <span th:onclick="fetch('/item?id=[[${i.id}]]',{ method : 'DELETE' })
+            .then(r=>r.text())
+            .then(()=>{
+                location.reload();
+            })
+            ">🗑️</span>
+        </div>
+</div>
+<button class="btn">버튼</button>
+<script>
+    <!-- 버튼을 클릭하면 AJAX body 를 이용해 /test1 로 POST 요청을 보내는 코드 -->
+    document.querySelectorAll('.btn')[0].addEventListener('click', function (){
+        fetch('/test1', {
+            method: 'POST',
+            headers:{'Content-Type' : 'application/json'},
+            body: JSON.stringify({name: 'kim'})
+        })
+    })
+</script>
+
+</body>
+</html>
