@@ -1,6 +1,10 @@
 package com.apple.shop.item;
 
+import com.apple.shop.member.Member;
+import com.apple.shop.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,14 +27,22 @@ public class ItemService {
     }
 
 
-    public void saveItem(String title, Integer price) {
+    public void saveItem(String title, Integer price, String userName) {
+        // 아이템 생성 및 저장
         Item item = new Item();
         item.setTitle(title);
         item.setPrice(price);
+        item.setUsername(userName);
+
         itemRepository.save(item);
     }
 
-    public void editItem(Long id,String title, Integer price) {
+
+    public void editItem(Long id, String title, Integer price) {
+        // 아이템 존재 여부 확인
+        Item item = itemRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("아이템을 찾을 수 없습니다."));
+
         // 입력 값 검증
         if (title == null || title.length() > 1000) {
             throw new IllegalArgumentException("Title must not be null and should be less than or equal to 1000 characters.");
@@ -38,8 +50,7 @@ public class ItemService {
         if (price == null || price < 0) {
             throw new IllegalArgumentException("Price must not be null and should be a positive number.");
         }
-        Item item = new Item();
-        item.setId(id);
+
         item.setTitle(title);
         item.setPrice(price);
         itemRepository.save(item);
@@ -47,6 +58,5 @@ public class ItemService {
 
     public void deleteItem(Long id) {
         itemRepository.deleteById(id);
-
     }
 }

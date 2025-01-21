@@ -1,7 +1,10 @@
 package com.apple.shop.item;
 
+import com.apple.shop.member.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -43,8 +46,10 @@ public class ItemController {
     }
 
     @PostMapping("/add")
-    String addPost(String title, Integer price) {
-        itemService.saveItem(title, price);
+    String addPost(@RequestParam String title, @RequestParam Integer price, Authentication auth) {
+        // Item 저장
+        itemService.saveItem(title, price,auth.getName());
+        System.out.println("Authenticated user: " + auth.getPrincipal()); // 디버그 코드
         return "redirect:/list";
     }
 
@@ -75,13 +80,13 @@ public class ItemController {
         }
     }
     @PostMapping("/edit")
-    String editItem(@RequestParam Long id ,String title, Integer price) {
+    public String editItem(@RequestParam Long id ,String title, Integer price) {
         itemService.editItem(id,title,price);
         return "redirect:/list";
     }
 
     @DeleteMapping("/item")
-    ResponseEntity<String> deleteItem(@RequestParam Long id) {
+    public ResponseEntity<String> deleteItem(@RequestParam Long id) {
         //새로고침 없이 요청 날리고 데이터 받아오려면 AJAX 사용, 이때 자바스크립트 안에 Thymeleaf 변수 넣기 가능
         itemService.deleteItem(id);
         return ResponseEntity.status(200).body("삭제완료");

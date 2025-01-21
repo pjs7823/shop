@@ -10,9 +10,17 @@
 </head>
 <body>
 <div th:replace="~{nav.html :: navbar}"></div>
-<form action="/add" method="post">
-    <input name = "title">
-    <input name = "price">
+<h4>로그인 하세요</h4>
+
+<div th:if="${param.error}">
+    <!-- 오른쪽 변수에 뭐가 있으면(여기서는 아이디나 비번이 틀렸으면) 아래 HTML 을 띄어주는 코드, 로그인 에러처리 -->
+    <h4>아이디나 비번 틀림</h4>
+</div>
+
+<!-- 스프링시큐리티에서 정의한 form 작성 방식 -->
+<form action="/login" method="POST">
+    <input name = "username">
+    <input name = "password" type="password">
     <button type = "submit">전송</button>
 </form>
 </body>

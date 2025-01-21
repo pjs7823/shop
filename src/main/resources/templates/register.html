@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/main.css" rel="stylesheet">
+</head>
+<body>
+<div th:replace="~{nav.html :: navbar}"></div>
+<h4>가입 환영</h4>
+
+<form action="/member" method="POST">
+  <input name="displayName" placeholder="이름">
+  <input name="username" placeholder="아이디">
+  <input name="password" type="password">
+  <button type="submit">전송</button>
+</form>
+</body>
+</html>

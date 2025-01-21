@@ -1,12 +1,11 @@
 package com.apple.shop.item;
 
+import com.apple.shop.member.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 @Entity
-@ToString
 @Getter
 @Setter
 public class Item {
@@ -16,7 +15,6 @@ public class Item {
     private String title;
     private Integer price;
 
-
-
-
+    @Column(nullable = false)
+    private String username; // 작성자(username)
 }
