@@ -2,6 +2,8 @@ package com.apple.shop.item;
 
 import com.apple.shop.member.Member;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,7 +27,8 @@ public class ItemController {
 
     private final ItemRepository itemRepository;
     private final ItemService itemService;
-//    lombok 문법 @RequiredArgsConstructor 없으면 생성자 만들어서 등록하면 됨
+    private final S3Service s3Service;
+    //    lombok 문법 @RequiredArgsConstructor 없으면 생성자 만들어서 등록하면 됨
 //    @Autowired
 //    public ItemController(ItemRepository itemRepository) {
 //        this.itemRepository = itemRepository;
@@ -39,6 +42,15 @@ public class ItemController {
         model.addAttribute("items", result);
         return "list.html";
     }
+    @GetMapping("/list/page/{i}")
+    String getListPage(Model model, @PathVariable Integer i) {
+        Page<Item> result = itemRepository.findPageBy(PageRequest.of(i - 1, 5)); // 페이지당 5개
+        int pages = result.getTotalPages(); // 전체 페이지 수
+        model.addAttribute("items", result.getContent()); // 현재 페이지의 아이템들
+        model.addAttribute("pages", pages); // 총 페이지 수
+        return "list.html";
+    }
+
 
     @GetMapping("/write")
     String write() {
@@ -46,11 +58,14 @@ public class ItemController {
     }
 
     @PostMapping("/add")
-    String addPost(@RequestParam String title, @RequestParam Integer price, Authentication auth) {
+    String addPost(@RequestParam String title,
+                   @RequestParam Integer price,
+                   @RequestParam(required = false)String imgUrl,
+                   Authentication auth) {
         // Item 저장
-        itemService.saveItem(title, price,auth.getName());
+        itemService.saveItem(title, price,imgUrl, auth.getName());
         System.out.println("Authenticated user: " + auth.getPrincipal()); // 디버그 코드
-        return "redirect:/list";
+        return "redirect:/list/page/1";
     }
 
     @GetMapping("detail/{id}")
@@ -65,8 +80,6 @@ public class ItemController {
             model.addAttribute("errorMessage", "해당 상품을 찾을 수 없습니다.");
             return "error.html";
         }
-
-
     }
 
     @GetMapping("/edit/{id}")
@@ -90,6 +103,12 @@ public class ItemController {
         //새로고침 없이 요청 날리고 데이터 받아오려면 AJAX 사용, 이때 자바스크립트 안에 Thymeleaf 변수 넣기 가능
         itemService.deleteItem(id);
         return ResponseEntity.status(200).body("삭제완료");
+    }
+    @GetMapping("/presigned-url")
+    @ResponseBody
+    String getURL(@RequestParam String filename){
+        var result = s3Service.createPresignedUrl("test/"+filename); //경로 설정
+        return result;
     }
 }
 

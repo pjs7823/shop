@@ -17,4 +17,6 @@ public class Item {
 
     @Column(nullable = false)
     private String username; // 작성자(username)
+
+    private String imgUrl; // 상품이미지
 }

@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="../static/main.css">
+    <link href="/main.css" rel="stylesheet">
     <title>Document</title>
 </head>
 <body>
@@ -15,5 +15,46 @@
     <input name = "price">
     <button type = "submit">전송</button>
 </form>
+
+<input type="file" onchange="getURL(this)">
+<img src="">
+<script>
+    async function getURL(e) {
+        // 유저가 이미지 고르면 서버에 요청을 날림, PresignedURL 방식으로 이미지 업로드
+        // 이미지 업로드 기능 2 (Presigned URL)
+        let name = encodeURIComponent(e.files[0].name)
+        let result = await fetch('/presigned-url?filename=' + name)
+        result = await result.text() // 이미지 URL
+        let response = await fetch(result,{
+            method: 'PUT',
+            body: e.files[0] // 유저가 고른 이미지
+        })
+
+        console.log(response)
+        console.log(response.url.split("?")[0])
+
+        if(response.ok){
+            // 이미지 미리보기
+            document.querySelector('img').src =response.url.split("?")[0]
+
+            // <form>에 <input type="hidden"> 추가
+            let form = document.querySelector('form'); // <form> 선택
+            let hiddenInput = document.querySelector('input[name="imgUrl"]'); // 기존 hidden input 탐색
+
+            if (!hiddenInput) {
+                // <input type="hidden">이 없으면 생성
+                hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.name = 'imgUrl';
+                form.appendChild(hiddenInput); // <form>에 추가
+            }
+            hiddenInput.value = result.split("?")[0]; // 이미지 URL 저장
+        } else {
+            alert('이미지 업로드에 실패했습니다.');
+        }
+    }
+</script>
+
+
 </body>
 </html>

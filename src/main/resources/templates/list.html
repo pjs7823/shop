@@ -11,7 +11,7 @@
 
 
 <div class="card" th:each="i:${items}">
-        <img src="https://placehold.co/300">
+    <img th:src="${i.imgUrl != null ? i.imgUrl : 'https://placehold.co/300'}" alt="Item Image" style="max-width: 300px;">
         <div>
             <a th:href="@{'/detail/'+${i.id}}">
                 <h4 th:text ="${i.title}">상품</h4>
@@ -26,9 +26,9 @@
             ">🗑️</span>
         </div>
 </div>
-<button class="btn">버튼</button>
+<!--button class="btn">버튼</button>
 <script>
-    <!-- 버튼을 클릭하면 AJAX body 를 이용해 /test1 로 POST 요청을 보내는 코드 -->
+    < 버튼을 클릭하면 AJAX body 를 이용해 /test1 로 POST 요청을 보내는 코드 >
     document.querySelectorAll('.btn')[0].addEventListener('click', function (){
         fetch('/test1', {
             method: 'POST',
@@ -36,7 +36,13 @@
             body: JSON.stringify({name: 'kim'})
         })
     })
-</script>
+</script!-->
+<!-- 페이지 번호 링크 -->
+<div class="pagination">
+    <span th:each="page : ${#numbers.sequence(1, pages)}">
+        <a th:href="@{'/list/page/' + ${page}}" th:text="${page}">1</a>
+    </span>
+</div>
 
 </body>
 </html>

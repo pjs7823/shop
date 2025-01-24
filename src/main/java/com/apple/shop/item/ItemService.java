@@ -27,11 +27,12 @@ public class ItemService {
     }
 
 
-    public void saveItem(String title, Integer price, String userName) {
+    public void saveItem(String title, Integer price,String imgUrl ,String userName) {
         // 아이템 생성 및 저장
         Item item = new Item();
         item.setTitle(title);
         item.setPrice(price);
+        item.setImgUrl(imgUrl);
         item.setUsername(userName);
 
         itemRepository.save(item);
