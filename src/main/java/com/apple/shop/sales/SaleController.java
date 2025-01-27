@@ -44,4 +44,5 @@ class SalesDto{
     public String itemName;
     public Integer price;
     public String userName;
+    public String tmp;
 }
