@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Results</title>
+    <link href="/main.css" rel="stylesheet">
+</head>
+<body>
+
+<div th:replace="~{nav.html :: navbar}"></div>
+
+<!-- 검색 폼 -->
+<form action="/search/page/1" method="GET">
+    <input name="searchText" th:value="${searchText}" style="display: inline" placeholder="검색어 입력">
+    <button>검색</button>
+</form>
+
+<!-- 검색 결과 정보 -->
+<p th:text="'검색어: ' + ${searchText}"></p>
+
+
+<!-- 검색 결과 목록 -->
+<div class="card" th:each="i : ${items}">
+    <img th:src="${i.imgUrl != null ? i.imgUrl : 'https://placehold.co/300'}" alt="Item Image" style="max-width: 300px;">
+    <div>
+        <a th:href="@{'/detail/' + ${i.id}}">
+            <h4 th:text="${i.title}">상품</h4>
+        </a>
+        <p th:text="${i.price + '원'}">가격</p>
+        <a th:href="@{'/edit/' + ${i.id}}">✏️</a>
+        <span th:onclick="fetch('/item?id=[[${i.id}]]', { method: 'DELETE' })
+            .then(r => r.text())
+            .then(() => { location.reload(); })">🗑️</span>
+    </div>
+</div>
+
+<!-- 페이지 번호 링크 -->
+<div class="pagination">
+    <span th:each="page : ${#numbers.sequence(1, pages)}">
+        <a th:href="@{'/search/page/' + ${page} + '?searchText=' + ${searchText}}" th:text="${page}">1</a>
+    </span>
+</div>
+
+</body>
+</html>

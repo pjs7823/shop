@@ -3,14 +3,12 @@ package com.apple.shop.member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,17 +32,9 @@ public class MyUserDetailsService implements UserDetailsService {
         authorities.add(new SimpleGrantedAuthority("일반 유저"));
         var a = new CustomUser(user.getUsername(), user.getPassword(), authorities);
         a.displayName = user.getDisplayName();
-
+        a.id = user.getId();
         return a;
     }
 
 }
 
-class CustomUser extends User {
-    public String displayName;
-
-    public CustomUser(String username, String password, Collection<? extends GrantedAuthority> authorities) {
-        super(username, password, authorities);
-    }
-
-}

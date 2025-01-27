@@ -15,5 +15,37 @@
     <p th:text="${data.price + '원'}"></p>
 </div>
 
+<!--댓글 입력-->
+<h4>댓글 입력</h4>
+<form action="/comment" method="post">
+    <input name = "content">
+    <input name = "parent" th:value="${data.id}" style="display: none">
+    <button type="submit">전송</button>
+</form>
+
+<!--주문 버튼-->
+<h4>주문 버튼</h4>
+<form action="/order" method="post">
+    <input name="itemName" th:value="${data.title}">
+    <input name="price" th:value="${data.price}">
+    <input name="count" placeholder="count">
+    <button style="text-align:left">주문하기</button>
+</form>
+
+
+<!-- 댓글 목록 -->
+<div class="comments">
+    <h4>댓글</h4>
+    <div th:if="${#lists.isEmpty(comments)}">
+        <p>댓글이 없습니다.</p>
+    </div>
+    <ul th:if="${!#lists.isEmpty(comments)}">
+        <li th:each="comment : ${comments}">
+            <p><b>작성자:</b> <span th:text="${comment.username}"></span></p>
+            <p><b>내용:</b> <span th:text="${comment.content}"></span></p>
+        </li>
+    </ul>
+</div>
+
 </body>
 </html>

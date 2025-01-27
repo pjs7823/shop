@@ -1,21 +1,18 @@
-package com.apple.shop.member;
+package com.apple.shop.comment;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
-@ToString
 @Getter
 @Setter
 @Entity
-public class Member {
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(unique = true)
     private String username;
-    private String displayName;
-    private String password;
+    @Column(length = 1000)
+    private String content;
+    private Long parentId;
 }
