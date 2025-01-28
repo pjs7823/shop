@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>주문 조회</title>
+  <link href="/main.css" rel="stylesheet">
+</head>
+<body>
+
+<div th:replace="~{nav.html :: navbar}"></div>
+
+<h1>주문 조회</h1>
+
+<table>
+  <thead>
+  <tr>
+    <th>상품명</th>
+    <th>가격</th>
+    <th>수량</th>
+    <th>주문자</th>
+  </tr>
+  </thead>
+  <tbody>
+  <!-- 주문 데이터 반복 출력 -->
+  <tr th:each="sale : ${result}">
+    <td th:text="${sale.itemName}">상품명</td>
+    <td th:text="${sale.price}">0</td>
+    <td th:text="${sale.count}">0</td>
+    <td th:text="${sale.userName}">주문자</td>
+  </tr>
+  </tbody>
+</table>
+
+
+</body>
+</html>
