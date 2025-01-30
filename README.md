@@ -1,3 +1,5 @@
-쇼핑몰 연습
-본격적으로 졸업프로젝트를 만들기 전에 스프링부트, JPA 사용 연습을 위해 간단한 쇼핑몰을 제작해봤다.</br>
--참고 강의 https://codingapple.com/course/spring-boot-jpa/
+# 쇼핑몰 연습
+
+본격적인 졸업 프로젝트를 시작하기 전에, Spring Boot와 JPA를 익히기 위해 간단한 쇼핑몰을 만들어 보았다.
+
+- 참고 강의: [코딩애플 - Spring Boot & JPA](https://codingapple.com/course/spring-boot-jpa/)
